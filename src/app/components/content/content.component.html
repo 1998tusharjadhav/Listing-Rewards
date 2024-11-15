@@ -1,0 +1,79 @@
+<main class="content">
+  <div class="dark-overlay" *ngIf="drawerOpen"></div>
+  <div>
+    <h1>Search</h1>
+    <div class="search-container">
+      <div class="input-wrapper">
+        <i class="fa fa-search"></i>
+        <input type="text" class="search-input" placeholder="Search" (input)="onSearch($event)"
+          [(ngModel)]="searchTerm">
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="applied-filters" *ngIf="selectedCategory">
+      <p style="font-weight: bold;">Applied Filters :</p>
+      <span class="filter-tag">
+        {{ selectedCategory }}
+        <button class="remove-filter" (click)="onCategorySelect('')">×</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="content-layout">
+
+    <aside class="categories-section">
+      <h3>Categories</h3>
+
+      <div class="category-list">
+        <div *ngFor="let category of categories" class="category-item" [class.active]="category === selectedCategory"
+          (click)="onCategorySelect(category)">
+          <span class="category-name">{{ category }}</span>
+          <i class="fa fa-check-circle" *ngIf="category === selectedCategory" class="selected-icon"></i>
+        </div>
+      </div>
+    </aside>
+
+
+    <section class="rewards-section">
+      <div class="rewards-header">
+        <span class="countHead">{{ rewards.length }} results found</span>
+        <div class="sort-container" *ngIf="rewards.length != 0">
+          <button class="open-drawer-button" (click)="toggleDrawer()">Sort</button>
+        </div>
+      </div>
+
+      <div class="rewards-grid">
+        <div *ngFor="let reward of rewards" class="reward-card">
+          <div class="reward-image">
+            <img [src]="reward.imageUrl || 'assets/placeholder.jpg'" [alt]="reward.title">
+          </div>
+          <div class="reward-details">
+            <h4>{{ reward.title }}</h4>
+            <p class="points">{{ reward.points }} Points</p>
+            <p *ngIf="reward.quantity === 0" class="out-of-stock">Out of Stock</p>
+            <p *ngIf="reward.quantity > 0 && reward.quantity <= 10" class="high-demand">
+              ON High Demand (Only {{ reward.quantity }} rewards left)
+            </p>
+            <p class="valid-until">Valid until: {{ reward.validUntil | date }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="right-drawer" [class.open]="drawerOpen">
+
+    <div class="drawer-content">
+      <div class="drawer-content-header">
+        <h4 style="font-weight: 200;">Filter By</h4>
+        <h4 style="font-size: 12px;text-decoration: underline;color: #e79f64;">Select all</h4>
+      </div>
+      <hr>
+      <button class="sort-button" (click)="onSort(true)">Sort A-Z</button>
+      <button class="sort-button" (click)="onSort(false)">Sort Z-A</button>
+    </div>
+
+  </div>
+</main>
